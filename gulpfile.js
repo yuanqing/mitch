@@ -26,7 +26,7 @@ gulp.task('test', function() {
     }));
 });
 
-gulp.task('coverage', function(cb) {
+gulp.task('coverage', function() {
   return gulp.src(paths.src)
     .pipe(plumber())
     .pipe(istanbul())
@@ -36,8 +36,7 @@ gulp.task('coverage', function(cb) {
         .pipe(istanbul.writeReports({
           dir: paths.coverage,
           reporters: ['lcov', 'text-summary']
-        }))
-        .on('end', cb);
+        }));
     });
 });
 
