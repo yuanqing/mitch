@@ -1,4 +1,4 @@
-/* globals describe, it, expect, jasmine */
+/* globals describe, it, expect */
 'use strict';
 
 var mitch = require('..');
@@ -6,9 +6,7 @@ var mitch = require('..');
 describe('mitch', function() {
 
   it('should be a function', function() {
-    expect(mitch('')).toEqual(jasmine.any(Function));
-    expect(mitch('foo')).toEqual(jasmine.any(Function));
-    expect(mitch('{foo}')).toEqual(jasmine.any(Function));
+    expect(typeof mitch('{foo}') === 'function').toBe(true);
   });
 
   it('should compare `pattern` with `str` if `pattern` has no capturing groups', function() {

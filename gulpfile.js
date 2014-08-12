@@ -19,29 +19,36 @@ gulp.task('lint', function() {
 
 gulp.task('test', function() {
   return gulp.src(paths.test)
+    .pipe(plumber())
     .pipe(jasmine({
       verbose: true,
       includeStackTrace: true
     }));
 });
 
-gulp.task('coverage', function() {
+gulp.task('coverage', function(cb) {
   return gulp.src(paths.src)
     .pipe(plumber())
     .pipe(istanbul())
     .on('finish', function() {
       gulp.src(paths.test)
         .pipe(jasmine())
-        .on('error', function(err) { throw err; })
         .pipe(istanbul.writeReports({
           dir: paths.coverage,
-          reporters: ['lcov']
-        }));
+          reporters: ['lcov', 'text-summary']
+        }))
+        .on('end', cb);
     });
+});
+
+gulp.task('watch', function() {
+  gulp.watch(paths.src, [
+    'lint',
+    'test',
+  ]);
 });
 
 gulp.task('default', [
   'lint',
-  'test',
-  'coverage'
+  'coverage',
 ]);
