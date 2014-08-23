@@ -2,16 +2,18 @@
 
 > Sugar for getting data out of strings.
 
-```js
-var m = mitch('blog/{year}-{month}-{slug}.md'); // RegExp is cached
+## Usage
 
-m('blog/2014-01-foo.md');     //=> { year: 2014, month: 01, slug: 'foo' }
-m('blog/2014-01-bar-baz.md'); //=> { year: 2014, month: 01, slug: 'bar-baz' }
+```js
+var m = mitch('blog/{date.year}-{date.month}-{slug}.md'); // RegExp is cached
+
+m('blog/2014-01-foo.md');     //=> { date: {year: 2014, month: 1}, slug: 'foo' }
+m('blog/2014-01-bar-baz.md'); //=> { date: {year: 2014, month: 1}, slug: 'bar-baz' }
 
 m('invalid'); //=> false
 ```
 
-Notice that the `2014` and `01` above are [Numbers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number); where possible, values extracted will be cast to a primitive type. (See [Stereotype.js](https://github.com/yuanqing/stereotype).)
+Dot-delimited capturing groups (namely `date.year` and `date.month`) will be &ldquo;expanded&rdquo; accordingly. Also note that `2014` and `01` are [Numbers](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number); where possible, values extracted will be cast to a primitive type. (See [Stereotype.js](https://github.com/yuanqing/stereotype).)
 
 More usage examples are in [the tests](https://github.com/yuanqing/mitch/blob/master/spec/mitch.spec.js).
 

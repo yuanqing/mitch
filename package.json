@@ -1,6 +1,6 @@
 {
   "name": "mitch",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sugar for getting data out of strings.",
   "author": "Lim Yuan Qing",
   "license": "MIT",
@@ -9,14 +9,23 @@
     "url": "git://github.com/yuanqing/mitch.git"
   },
   "devDependencies": {
-    "gulp": "^3.8.0",
-    "gulp-istanbul": "^0.2.1",
-    "gulp-jasmine": "^0.3.0",
-    "gulp-jshint": "^1.8.2",
-    "gulp-plumber": "^0.6.4",
+    "istanbul": "^0.3.0",
+    "jasmine-node": "^1.14.5",
+    "jshint": "^2.5.4",
     "jshint-stylish": "^0.4.0"
   },
   "dependencies": {
+    "jaunt": "^1.1.1",
     "stereotype": "^1.0.0"
-  }
+  },
+  "scripts": {
+    "test": "node_modules/.bin/jasmine-node spec --verbose",
+    "cover": "node_modules/.bin/istanbul cover node_modules/.bin/jasmine-node ./spec -x **/spec/**",
+    "lint": "node_modules/.bin/jshint --verbose --reporter node_modules/jshint-stylish/stylish.js ./index.js"
+  },
+  "keywords": [
+    "regexp",
+    "string",
+    "pattern"
+  ]
 }

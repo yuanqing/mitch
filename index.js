@@ -1,5 +1,6 @@
 'use strict';
 
+var jaunt = require('jaunt');
 var stereotype = require('stereotype');
 
 var escape = function(str) {
@@ -10,7 +11,7 @@ var escape = function(str) {
 
 var mitch = function(pattern) {
 
-  var keys = [],
+  var groups = [],
       regex = '',
       curr = '',
       len = pattern.length,
@@ -33,7 +34,7 @@ var mitch = function(pattern) {
       } else {
         regex += '([^' + escape(c) + ']+)';
       }
-      keys.push(curr.trim());
+      groups.push(curr.trim());
       curr = '';
       break;
     default:
@@ -44,7 +45,7 @@ var mitch = function(pattern) {
 
   return function(str) {
     var matches, obj = {};
-    if (!keys.length) {
+    if (!groups.length) {
       return str === pattern;
     }
     matches = regex.exec(str);
@@ -52,8 +53,8 @@ var mitch = function(pattern) {
       return false;
     }
     matches.shift();
-    keys.forEach(function(key, i) {
-      obj[key] = stereotype(matches[i]);
+    groups.forEach(function(group, i) {
+      jaunt.set(obj, group, stereotype(matches[i]));
     });
     return obj;
   };
