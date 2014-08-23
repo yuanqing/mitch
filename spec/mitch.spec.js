@@ -42,7 +42,7 @@ describe('mitch(pattern)(str)', function() {
     expect(mitch('{foo}')('3.14')).toEqual({ foo: 3.14 });
   });
 
-  it('capture multiple values', function() {
+  it('captures multiple values', function() {
     expect(mitch('{foo} {bar}')('baz qux')).toEqual({
       foo: 'baz',
       bar: 'qux'
