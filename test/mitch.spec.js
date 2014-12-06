@@ -5,11 +5,21 @@ var mitch = require('..');
 
 describe('mitch(pattern)(str)', function() {
 
-  it('compares `pattern` with `str` if `pattern` has no capturing groups', function() {
+  it('checks if `str` === `pattern` (has no capturing group or wildcard)', function() {
     expect(mitch('')('')).toBe(true);
-    expect(mitch('')('bar')).toBe(false);
+    expect(mitch('')('foo')).toBe(false);
     expect(mitch('*')('*')).toBe(true);
     expect(mitch('foo')('bar')).toBe(false);
+  });
+
+  it('checks if `str` matches `pattern` (has wildcard only)', function() {
+    expect(mitch('*')('')).toBe(false);
+    expect(mitch('*')('foo')).toBe(true);
+    expect(mitch(' * ')('foo')).toBe(false);
+    expect(mitch(' * ')(' foo ')).toBe(true);
+    expect(mitch('**')('foobar')).toBe(true);
+    expect(mitch('*-*')('foobar')).toBe(false);
+    expect(mitch('*-*')('foo-bar')).toBe(true);
   });
 
   it('captures a single value', function() {
@@ -23,14 +33,14 @@ describe('mitch(pattern)(str)', function() {
     expect(mitch('{foo.1}')('baz')).toEqual({ foo: [ undefined, 'baz' ] });
   });
 
-  it('allows whitespace in the key of a capturing group', function() {
+  it('allows whitespace in key of a capturing group', function() {
     expect(mitch('{ foo}')('bar')).toEqual({ foo: 'bar' });
     expect(mitch('{foo }')('bar')).toEqual({ foo: 'bar' });
     expect(mitch('{ foo }')('bar')).toEqual({ foo: 'bar' });
     expect(mitch('{  foo  }')('bar')).toEqual({ foo: 'bar' });
   });
 
-  it('type casts the captured values wherever possible', function() {
+  it('type casts captured values wherever possible', function() {
     expect(mitch('{foo}')('undefined')).toEqual({ foo: undefined });
     expect(mitch('{foo}')('null')).toEqual({ foo: null });
     expect(isNaN(mitch('{foo}')('NaN').foo)).toBe(true);

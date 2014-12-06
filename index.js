@@ -4,68 +4,69 @@ var jaunt = require('jaunt');
 var stereotype = require('stereotype');
 
 var escape = function(str) {
-
   return str.replace(/([.*+?^{}()|\[\]\/\\])/g, '\\$1');
-
 };
 
 var isDigit = function(c) {
-
   return c >= '0' && c <= '9';
-
 };
 
 var mitch = function(pattern) {
 
+  var split = pattern.match(new RegExp('\\*|{(.+?)}|([^*{}]+)', 'g')) || [];
+
   var groups = [];
   var regex = '';
 
-  var curr = '';
-  var c = '';
-  var i;
-  var len;
+  var i, len, str, adjacentChar;
 
-  for (i = 0, len = pattern.length; i < len; ++i) {
-    switch (pattern[i]) {
-    case '{':
-      if (i !== 0) {
-        c = pattern[i-1];
-      }
-      regex += '' + escape(curr);
-      curr = '';
-      break;
-    case '}':
-      if (i + 1 < len) {
-        c = pattern[i+1];
-      }
-      if (c === '') {
-        regex += '(.+)';
+  for (i = 0, len = split.length; i < len; ++i) {
+    str = split[i];
+    if (str === '*' || str[0] === '{') {
+      str = str.substring(1, str.length-1).trim();
+      if (i < len - 1) {
+        adjacentChar = split[i+1][0];
       } else {
-        regex += '([^' + escape(c) + ']+)';
+        if (i > 0) {
+          adjacentChar = split[i-1].slice(-1);
+        } else {
+          adjacentChar = false;
+        }
       }
-      groups.push(curr.trim());
-      curr = '';
-      break;
-    default:
-      curr += pattern[i];
+      if (adjacentChar === '*') {
+        adjacentChar = false;
+      }
+      if (str === '*') {
+        regex += '(?:';
+      } else {
+        regex += '(';
+        groups.push(str);
+      }
+      if (adjacentChar) {
+        regex += '[^' + escape(adjacentChar) + ']+)';
+      } else {
+        regex += '.+)';
+      }
+    } else {
+      regex += escape(str);
     }
   }
-  regex = new RegExp('^' + regex + escape(curr) + '$', 'm'); // RegExp is cached
+  regex = new RegExp('^' + regex + '$', 'm');
 
   return function(str) {
-    var matches, obj;
+    var matches = regex.exec(str);
+    var obj;
     if (!groups.length) {
-      return str === pattern;
+      return matches ? true : false;
     }
     obj = isDigit(groups[0][0]) ? [] : {};
-    matches = regex.exec(str);
     if (!matches) {
       return false;
     }
     matches.shift();
-    groups.forEach(function(group, i) {
-      jaunt.set(obj, group, stereotype(matches[i]));
-    });
+    for (i = 0, len = groups.length; i < len; ++i) {
+      jaunt.set(obj, groups[i], stereotype(matches[i]));
+    }
     return obj;
   };
 
