@@ -9,14 +9,23 @@ var escape = function(str) {
 
 };
 
+var isDigit = function(c) {
+
+  return c >= '0' && c <= '9';
+
+};
+
 var mitch = function(pattern) {
 
-  var groups = [],
-      regex = '',
-      curr = '',
-      len = pattern.length,
-      c = '', i;
-  for (i = 0; i < len; ++i) {
+  var groups = [];
+  var regex = '';
+
+  var curr = '';
+  var c = '';
+  var i;
+  var len;
+
+  for (i = 0, len = pattern.length; i < len; ++i) {
     switch (pattern[i]) {
     case '{':
       if (i !== 0) {
@@ -26,7 +35,7 @@ var mitch = function(pattern) {
       curr = '';
       break;
     case '}':
-      if (i+1 < len) {
+      if (i + 1 < len) {
         c = pattern[i+1];
       }
       if (c === '') {
@@ -41,15 +50,14 @@ var mitch = function(pattern) {
       curr += pattern[i];
     }
   }
-  regex = new RegExp('^' + regex + curr + '$', 'm'); // RegExp is cached
+  regex = new RegExp('^' + regex + escape(curr) + '$', 'm'); // RegExp is cached
 
   return function(str) {
-    var matches, obj, c;
+    var matches, obj;
     if (!groups.length) {
       return str === pattern;
     }
-    c = groups[0][0]; // first character of first group
-    obj = c >= '0' && c <= '9' ? [] : {};
+    obj = isDigit(groups[0][0]) ? [] : {};
     matches = regex.exec(str);
     if (!matches) {
       return false;

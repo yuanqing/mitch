@@ -8,14 +8,13 @@ describe('mitch(pattern)(str)', function() {
   it('compares `pattern` with `str` if `pattern` has no capturing groups', function() {
     expect(mitch('')('')).toBe(true);
     expect(mitch('')('bar')).toBe(false);
-    expect(mitch('foo')('foo')).toBe(true);
+    expect(mitch('*')('*')).toBe(true);
     expect(mitch('foo')('bar')).toBe(false);
   });
 
   it('captures a single value', function() {
-    var m = mitch('{foo}');
-    expect(m('')).toBe(false);
-    expect(m('bar')).toEqual({ foo: 'bar' });
+    expect(mitch('{foo}')('')).toBe(false);
+    expect(mitch('{foo}')('bar')).toEqual({ foo: 'bar' });
   });
 
   it('allows dot-delimited keys', function() {
