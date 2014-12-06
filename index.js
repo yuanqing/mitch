@@ -44,10 +44,12 @@ var mitch = function(pattern) {
   regex = new RegExp('^' + regex + curr + '$', 'm'); // RegExp is cached
 
   return function(str) {
-    var matches, obj = {};
+    var matches, obj, c;
     if (!groups.length) {
       return str === pattern;
     }
+    c = groups[0][0]; // first character of first group
+    obj = c >= '0' && c <= '9' ? [] : {};
     matches = regex.exec(str);
     if (!matches) {
       return false;
