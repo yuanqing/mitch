@@ -9,20 +9,22 @@
     "url": "git://github.com/yuanqing/mitch.git"
   },
   "devDependencies": {
-    "istanbul": "^0.3.0",
-    "jasmine-node": "^1.14.5",
+    "browserify": "^6.3.3",
+    "istanbul": "^0.3.2",
+    "minijasminenode2": "^1.0.0",
     "jshint": "^2.5.4",
-    "jshint-stylish": "^0.4.0"
+    "jshint-stylish": "^0.4.0",
+    "uglify-js": "^2.4.15"
   },
   "dependencies": {
     "jaunt": "^1.1.1",
     "stereotype": "^1.0.0"
   },
   "scripts": {
-    "cover": "node_modules/.bin/istanbul cover node_modules/.bin/jasmine-node ./spec -x **/spec/**",
-    "lint": "node_modules/.bin/jshint --verbose --reporter node_modules/jshint-stylish/stylish.js index.js",
-    "lint-test": "node_modules/.bin/jshint --verbose --reporter node_modules/jshint-stylish/stylish.js ./spec/*.js",
-    "test": "node_modules/.bin/jasmine-node spec --verbose"
+    "lint": "node_modules/.bin/jshint --reporter=node_modules/jshint-stylish/stylish.js --verbose index.js test/*.spec.js",
+    "test": "rm -rf coverage && node_modules/.bin/istanbul cover -- node_modules/.bin/minijasminenode2 test/*.spec.js --verbose",
+    "dist": "rm -rf dist && mkdir dist && node_modules/.bin/browserify index.js --debug --outfile dist/mitch.js --standalone mitch && node_modules/.bin/uglifyjs dist/mitch.js --output dist/mitch.min.js",
+    "build": "npm run lint && npm test && npm run dist"
   },
   "keywords": [
     "parser",
