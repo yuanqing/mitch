@@ -64,7 +64,7 @@ To use Segue in the browser, include [the minified script](https://github.com/yu
   - Refactor RegExp compilation logic
   - Add wildcard (`*`) support
   - Add [Browserified](http://browserify.org/) bundle
-  - Add `Bower.json`
+  - Add `bower.json`
 
 - 0.2.0
   - Allow dot-delimited keys
