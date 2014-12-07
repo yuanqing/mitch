@@ -8,7 +8,7 @@
 var pattern = '*/{date.year}-{date.month}-{slug}.(txt|md)';
 var m = mitch(pattern);
 
-m('foo/2014-01-bar.TXT');   //=> { date: {year: 2014, month: 1}, slug: 'bar' }
+m('foo/2014-01-bar.TXT');    //=> { date: {year: 2014, month: 1}, slug: 'bar' }
 m('bar/2014-01-baz-qux.md'); //=> { date: {year: 2014, month: 1}, slug: 'baz-qux' }
 
 m('invalid'); //=> false
