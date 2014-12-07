@@ -70,16 +70,13 @@ To use Segue in the browser, include [the minified script](https://github.com/yu
   - Refactor RegExp compilation logic
   - Change string matching to be case-insensitive
   - Add support for &ldquo;options&rdquo;, eg. `(foo|bar)`, `(foo*|*bar)`
-
 - 0.3.0
   - Refactor RegExp compilation logic
   - Add wildcard (`*`) support
   - Add [Browserified](http://browserify.org/) bundle
   - Add `bower.json`
-
 - 0.2.0
   - Allow dot-delimited keys
-
 - 0.1.0
   - Initial release
 
