@@ -5,21 +5,35 @@ var mitch = require('..');
 
 describe('mitch(pattern)(str)', function() {
 
-  it('checks if `str` === `pattern` (has no capturing group or wildcard)', function() {
+  it('checks if `str` matches `pattern`', function() {
+    // text
     expect(mitch('')('')).toBe(true);
     expect(mitch('')('foo')).toBe(false);
-    expect(mitch('*')('*')).toBe(true);
     expect(mitch('foo')('bar')).toBe(false);
-  });
-
-  it('checks if `str` matches `pattern` (has wildcard only)', function() {
+    expect(mitch('foo')('foo')).toBe(true);
+    // wildcard
     expect(mitch('*')('')).toBe(false);
     expect(mitch('*')('foo')).toBe(true);
     expect(mitch(' * ')('foo')).toBe(false);
     expect(mitch(' * ')(' foo ')).toBe(true);
-    expect(mitch('**')('foobar')).toBe(true);
     expect(mitch('*-*')('foobar')).toBe(false);
     expect(mitch('*-*')('foo-bar')).toBe(true);
+    // options
+    expect(mitch('(foo|bar)')('baz')).toBe(false);
+    expect(mitch('(foo|bar)')('foo')).toBe(true);
+    expect(mitch('(foo|bar|)')('')).toBe(false);
+    expect(mitch('(foo|bar|)')('bar')).toBe(true);
+    expect(mitch('( foo | bar )')('foo')).toBe(false);
+    expect(mitch('( foo | bar )')(' foo ')).toBe(true);
+    expect(mitch('(foo*|*bar|baz*qux)')('foo')).toBe(false);
+    expect(mitch('(foo*|*bar|baz*qux)')('foo-')).toBe(true);
+    expect(mitch('(foo*|*bar|baz*qux)')('-bar')).toBe(true);
+    expect(mitch('(foo*|*bar|baz*qux)')('baz-qux')).toBe(true);
+  });
+
+  it('case sensitive matching', function() {
+    expect(mitch('(foo|bar)', true)('foo')).toBe(true);
+    expect(mitch('(foo|bar)', true)('FOO')).toBe(false);
   });
 
   it('captures a single value', function() {
@@ -56,10 +70,9 @@ describe('mitch(pattern)(str)', function() {
       foo: 'baz',
       bar: 'qux'
     });
-    expect(mitch('{foo}/{bar}-{baz}.md')('qux/quux-corge-grault.md')).toEqual({
+    expect(mitch('{foo}/*-{bar}.md')('qux/quux-corge-grault.md')).toEqual({
       foo: 'qux',
-      bar: 'quux',
-      baz: 'corge-grault'
+      bar: 'corge-grault'
     });
     expect(mitch('{foo}/{bar}-{baz}')('qux/quux-corge-grault')).toBe(false);
     expect(mitch('{foo}/{bar}')('baz/qux/corge')).toBe(false);
