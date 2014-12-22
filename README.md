@@ -50,9 +50,7 @@ Install via [Bower](http://bower.io/):
 $ bower i --save yuanqing/mitch
 ```
 
----
-
-To use Segue in the browser, include [the minified script](https://github.com/yuanqing/mitch/blob/master/dist/mitch.min.js) in your HTML:
+To use Mitch in the browser, include [the minified script](https://github.com/yuanqing/mitch/blob/master/dist/mitch.min.js) in your HTML:
 
 ```html
 <body>
@@ -68,7 +66,7 @@ To use Segue in the browser, include [the minified script](https://github.com/yu
 
 - 0.4.0
   - Refactor RegExp compilation logic
-  - Change string matching to be case-insensitive
+  - Make string matching case-insensitive by default
   - Add support for &ldquo;options&rdquo;, eg. `(foo|bar)`, `(foo*|*bar)`
 - 0.3.0
   - Refactor RegExp compilation logic
